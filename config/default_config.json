@@ -1,3 +1,9 @@
 {
-  "project_name" : "Sample Project"
+  "project_name": "Sample Project",
+  "host": "SERVICENOW_HOST",
+  "username": "USERNAME",
+  "client_id": "dd91abb1d06952001c186e0fc473f04f",
+  "client_secret": "test",
+  "access_token": "HASH",
+  "refresh_token": "REFRESH_TOKEN"
 }

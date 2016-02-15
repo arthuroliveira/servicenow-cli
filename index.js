@@ -10,60 +10,7 @@ require('./commands')(program);
 
 
 program
-    .command('ls')
-    .description("List files")
-    .action(function () {
-        console.log('ls');
-    });
-
-program
-    .command("setuppppp")
-    .description("Run this command to create/update the HASH used on webservice")
-    .action(function () {
-        co(function *() {
-            var first = yield prompt('Host: ');
-            var last = yield prompt('Username: ');
-            var password = yield prompt.password("Password: ");
-
-
-            var client = restify.createJsonClient({
-                url: "https://aoliveira1.service-now.com"
-            });
-            client.basicAuth(user, pass);
-            client.get('/', function (err, req, res, obj) {
-                console.log(res);
-            });
-            // request
-            // 	.post('https://api.bitbucket.org/2.0/snippets/')
-            // 	.auth(username, password)
-            // 	.attach('file', filename, file)
-            // 	.set('Accept', 'application/json')
-            // 	.end(function (err, res) {
-            // 		if (err) {
-            // 			console.error(err);
-            // 		} else if (!res.ok) {
-            // 			console.error(res.text);
-            // 		} else {
-            // 			console.log(res.body.links.html.href);
-            // 		}
-            // 	});
-            process.stdin.pause();
-        })();
-    });
-
-
-program
-    .command("pull")
-    .description("Run this command to pull uipages, uiscript, stylesheets and uimacros from servicenow")
-    .action(function () {
-        co(function *() {
-
-            process.stdin.pause();
-        })();
-    })
-
-program
-    .command("test-rest")
+    .command("get-hash")
     .description("Run this command to create/update the HASH used on webservice")
     .action(function () {
         co(function *() {
