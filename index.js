@@ -1,15 +1,15 @@
 #!/usr/bin/env node
-var program = require('commander');
 var co = require('co');
 var prompt = require('co-prompt');
 var Client = require('node-rest-client').Client;
-var fs = require('fs');
-var path = require('path');
 
+
+var program = require('commander');
+
+require('./commands')(program);
 
 
 program
-    .version('0.0.1')
     .command('ls')
     .description("List files")
     .action(function () {
@@ -17,7 +17,7 @@ program
     });
 
 program
-    .command("setup")
+    .command("setuppppp")
     .description("Run this command to create/update the HASH used on webservice")
     .action(function () {
         co(function *() {
@@ -92,38 +92,8 @@ program
         })();
     });
 
+
 program
-    .command("test")
-    .description("Run this command to create/update the HASH used on webservice")
-    .action(function () {
-        var config_path = path.join(__dirname, ".sn-config.json");
-        var default_config = require('./default_config.json');
-
-        console.log(default_config);
-
-        co(function *() {
-
-            var servicenow_config = {
-                test: "test"
-            }
-
-            fs.lstat(config_path, function (err, stats) {
-                if (err) {
-                    fs.writeFile(config_path, JSON.stringify(servicenow_config), function (err) {
-                        if (err) {
-                            return console.log(err);
-                        }
-                        console.log("The file was saved!");
-                    });
-                } else {
-                    console.log('config file already exist, load and update if needed')
-                }
-            });
-
-
-            //process.stdin.pause();
-        })();
-    });
-
-program.parse(process.argv);
+    .version('0.0.1')
+    .parse(process.argv);
 
