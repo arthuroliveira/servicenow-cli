@@ -4,5 +4,5 @@
 
 
 module.exports = function(program){
-    require('./setup')(program,prompt);
+    require('./setup')(program);
 };
