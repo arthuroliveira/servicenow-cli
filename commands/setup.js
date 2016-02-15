@@ -1,11 +1,11 @@
 /**
  * Created by arthur.oliveira on 2/15/16.
  */
+var default_config = require('../config/default_config.json');
+
 var fs = require('fs');
 var path = require('path');
-var default_config = require('../config/default_config.json');
 var co = require('co');
-
 
 module.exports = function (program) {
     program
@@ -20,9 +20,12 @@ module.exports = function (program) {
                 fs.lstat(config_path, function (err, stats) {
                     if (err) {
 
-                        var first = yield prompt('Host: ');
-                        var last = yield prompt('Username: ');
-                        var password = yield prompt.password("Password: ");
+                        console.log("Before we continue, please answer few questions");
+                        var host = yield prompt('Host: ');
+                        var username = yield prompt('Username: ');
+                        var password = yield prompt.password("Password (we dont save it!): ");
+                        var client_id = yield prompt.password("RestAPI Client Id: ");
+                        var client_secret = yield prompt.password("RestAPI Client Secret(We wont save it!): ");
 
 
 

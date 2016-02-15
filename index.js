@@ -6,7 +6,7 @@ var Client = require('node-rest-client').Client;
 
 var program = require('commander');
 
-require('./commands')(program);
+//require('./commands')(program);
 
 
 program
@@ -23,7 +23,7 @@ program
                 parameters: {
                     grant_type: "password",
                     client_id: "dd91abb1d06952001c186e0fc473f04f",
-                    client_secret: "test",
+                    //client_secret: "test",
                     username: username,
                     password: password
                 },
