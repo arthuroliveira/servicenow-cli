@@ -1,31 +1,9 @@
 #!/usr/bin/env node
-var co = require('co');
-var prompt = require('co-prompt');
 var Client = require('node-rest-client').Client;
-
-
+var inquirer = require("inquirer");
 var program = require('commander');
 
-//require('./commands')(program);
-/**
- * When example
- */
-
-"use strict";
-var inquirer = require("inquirer");
-
-var questions = [
-    {
-        type: "input",
-        name: "username",
-        message: "Enter your servicenow username",
-    },
-    {
-        type: "password",
-        message: "Enter your servicenow password",
-        name: "password"
-    }
-];
+require('./commands')(program);
 
 program
     .command("get-hash")
