@@ -2,6 +2,8 @@
  * Created by arthur.oliveira on 2/15/16.
  */
 var restify = require('restify');
+var url = require('url');
+var util = require('util');
 
 module.exports = function table(tableName, config) {
     var auth = new Buffer(config.auth, 'base64').toString(),
@@ -19,9 +21,8 @@ module.exports = function table(tableName, config) {
         var client = restify.createJsonClient(clientOptions);
         client.basicAuth(user, pass);
     } catch (err) {
-        logger.error('Some error happend', err);
+        console.log('Some error happend', err);
     }
-
 
 
     this.tableName = tableName;
@@ -29,7 +30,7 @@ module.exports = function table(tableName, config) {
     function validateResponse(err, req, res, obj, request) {
 
         // consider moving low level debug to high level debug (end user as below)
-        logResponse(err, req, res, obj, request);
+        //logResponse(err, req, res, obj, request);
 
         var help = '';
         // special failing case (connections blocked etc.)
@@ -43,7 +44,6 @@ module.exports = function table(tableName, config) {
 
             help = errorList[err.code] || 'Something failed badly.. internet connection rubbish?';
             help += util.format('\ndetails: %j', err);
-            logger.warn(help);
             return new Error(help);
         }
 
@@ -69,7 +69,7 @@ module.exports = function table(tableName, config) {
             return err;
         }
         if (obj.error) {
-            logger.error('ERROR found in obj.error : ', obj.error);
+            console.log('ERROR found in obj.error : ', obj.error);
             // DP TODO : Investigate: Error: json object is null
             return new Error(obj.error);
             // this is actually not an error! It's just that the server didn't return anything to us
@@ -83,16 +83,16 @@ module.exports = function table(tableName, config) {
 
     function logResponse(err, req, res, obj, request) {
         var resCode = res ? res.statusCode : 'no response';
-        logger.debug('-------------------------------------------------------');
-        logger.debug(err);
-        logger.debug('HTTP ' + req.method + ':', client.url.host, req.path,
+        console.log('-------------------------------------------------------');
+        console.log(err);
+        console.log('HTTP ' + req.method + ':', client.url.host, req.path,
             '\nrequest:', request.postObj || '',
             '\nresponse:', util.inspect({
                 statusCode: resCode,
                 body: obj
             }, true, 10)
         );
-        logger.debug('-------------------------------------------------------');
+        console.log('-------------------------------------------------------');
     }
 
     function send(request) {
@@ -112,7 +112,6 @@ module.exports = function table(tableName, config) {
         }
 
         var path = url.format(urlObj);
-        logger.debug('snc-client send() path: ' + path);
 
         function handleResponse(err, req, res, obj) {
             err = validateResponse(err, req, res, obj, request);
@@ -127,7 +126,7 @@ module.exports = function table(tableName, config) {
                 client.get(path, handleResponse);
             }
         } catch (err) {
-            logger.error('Some connection error happend...', err);
+            console.log('Some connection error happend...', err);
             // fail hard!
             process.exit(1);
         }
@@ -135,7 +134,7 @@ module.exports = function table(tableName, config) {
 
     this.getRecords = function(query, callback) {
         var parms = {
-            table: this.this.tableName,
+            table: this.tableName,
             action: 'getRecords',
             parmName: 'query',
             parmValue: query,
@@ -169,7 +168,7 @@ module.exports = function table(tableName, config) {
     }
 
     this.insert = function(obj, callback) {
-        logger.warn('DP TODO : insert not yet tested nor supported!');
+        console.log('DP TODO : insert not yet tested nor supported!');
         //send({table: this.tableName, action: 'insert', postObj: obj, callback: callback});
     }
 

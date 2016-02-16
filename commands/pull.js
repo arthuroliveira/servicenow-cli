@@ -10,9 +10,28 @@ module.exports = function (program) {
         .command("pull")
         .description("Run this command to pull files from ServiceNow")
         .action(function () {
-            require_config(function(config){
-                console.log(config.host);
+            require_config(function (config) {
 
+                var questions = [
+                    {
+                        type: "input",
+                        name: "table",
+                        message: "What table would you like to fetch? ",
+                        default: "incident"
+                    }];
+
+                inquirer.prompt(questions, function (answers) {
+                    var service = ServiceNow(answers.table, config);
+
+
+                    service.getRecords({rows: 10,name:"fidelity__homepage"}, function (err, obj) {
+                        if (err) {
+                            console.log("ERROR " + err);
+                        }
+
+                        console.log(JSON.stringify(obj));
+                    });
+                });
 
             });
         });
