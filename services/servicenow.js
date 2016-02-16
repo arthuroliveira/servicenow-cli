@@ -3,9 +3,28 @@
  */
 var restify = require('restify');
 
+module.exports = function table(tableName, config) {
+    var auth = new Buffer(config.auth, 'base64').toString(),
+        parts = auth.split(':'),
+        user = parts[0],
+        pass = parts[1],
+        protocol = config.protocol
 
-module.exports = function table(tableName) {
-    var client = restify.createJsonClient(clientOptions);
+
+    var clientOptions = {
+        url: protocol + '://' + config.host
+    };
+
+    try {
+        var client = restify.createJsonClient(clientOptions);
+        client.basicAuth(user, pass);
+    } catch (err) {
+        logger.error('Some error happend', err);
+    }
+
+
+
+    this.tableName = tableName;
 
     function validateResponse(err, req, res, obj, request) {
 
@@ -114,9 +133,9 @@ module.exports = function table(tableName) {
         }
     }
 
-    function getRecords(query, callback) {
+    this.getRecords = function(query, callback) {
         var parms = {
-            table: tableName,
+            table: this.this.tableName,
             action: 'getRecords',
             parmName: 'query',
             parmValue: query,
@@ -126,7 +145,7 @@ module.exports = function table(tableName) {
         if (query.query) {
             parms.parmValue = query.query;
             // ensures that tables that are extended are still restricted to 1 table
-            parms.parmValue += "^sys_class_name=" + tableName;
+            parms.parmValue += "^sys_class_name=" + this.tableName;
         }
         if (query.rows) {
             parms.rows = query.rows;
@@ -139,9 +158,9 @@ module.exports = function table(tableName) {
         send(parms);
     }
 
-    function get(id, callback) {
+    this.get = function(id, callback) {
         send({
-            table: tableName,
+            table: this.tableName,
             action: 'get',
             parmName: 'sys_id',
             parmValue: id,
@@ -149,9 +168,9 @@ module.exports = function table(tableName) {
         });
     }
 
-    function insert(obj, callback) {
+    this.insert = function(obj, callback) {
         logger.warn('DP TODO : insert not yet tested nor supported!');
-        //send({table: tableName, action: 'insert', postObj: obj, callback: callback});
+        //send({table: this.tableName, action: 'insert', postObj: obj, callback: callback});
     }
 
     /**
@@ -159,9 +178,9 @@ module.exports = function table(tableName) {
      * @param query {object} - contains query data
      * @param callback {function}
      */
-    function update(query, callback) {
+    this.update = function(query, callback) {
         var parms = {
-            table: tableName,
+            table: this.t,
             action: 'update',
             parmName: 'query',
             parmValue: query.query,
@@ -177,10 +196,5 @@ module.exports = function table(tableName) {
         send(parms);
     }
 
-    return {
-        get: get,
-        getRecords: getRecords,
-        insert: insert,
-        update: update
-    };
+    return this;
 };

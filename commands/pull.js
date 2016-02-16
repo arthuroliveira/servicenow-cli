@@ -3,6 +3,7 @@
  */
 var inquirer = require("inquirer");
 var require_config = require("../helper/config_validator");
+var ServiceNow = require("../services/servicenow");
 
 module.exports = function (program) {
     program
@@ -11,6 +12,8 @@ module.exports = function (program) {
         .action(function () {
             require_config(function(config){
                 console.log(config.host);
+
+
             });
         });
 
