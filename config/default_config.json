@@ -1,9 +1,39 @@
 {
-  "project_name": "Sample Project",
   "host": "SERVICENOW_HOST",
-  "username": "USERNAME",
-  "client_id": "dd91abb1d06952001c186e0fc473f04f",
-  "client_secret": "test",
-  "access_token": "HASH",
-  "refresh_token": "REFRESH_TOKEN"
+  "hash": "AUTH_HASH",
+  "project_prefix" : "PREFIX__",
+  "folders": {
+    "stylesheets": {
+      "table": "content_css",
+      "key": "name",
+      "fields": {
+        "css": "style"
+      },
+      "_custom": true
+    },
+    "ui_macros": {
+      "table": "sys_ui_macro",
+      "key": "name",
+      "fields": {
+        "xhtml": "xml"
+      },
+      "_custom": true
+    },
+    "ui_pages": {
+      "table": "sys_ui_page",
+      "key": "name",
+      "fields": {
+        "xhtml": "html"
+      },
+      "_custom": true
+    },
+    "ui_scripts": {
+      "table": "sys_ui_script",
+      "key": "name",
+      "fields": {
+        "js": "script"
+      },
+      "_custom": true
+    }
+  }
 }
