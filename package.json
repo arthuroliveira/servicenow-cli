@@ -16,6 +16,6 @@
     "restify": "^4.0.4"
   },
   "bin": {
-    "practice": "./index.js"
+    "servicenow": "./index.js"
   }
 }
