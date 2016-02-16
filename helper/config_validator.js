@@ -1,8 +1,9 @@
 /**
  * Created by arthur.oliveira on 2/15/16.
  */
-var config_path = path.join(process.cwd(), ".sn-config.json");
 var fs = require('fs');
+var path = require('path');
+var config_path = path.join(process.cwd(), ".sn-config.json");
 
 
 module.exports = function (callback) {
@@ -15,7 +16,7 @@ module.exports = function (callback) {
                 if (err) {
                     console.log(err)
                 } else {
-                    callback()
+                    callback(JSON.parse(data));
                 }
             });
         }

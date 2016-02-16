@@ -5,5 +5,5 @@
 
 module.exports = function(program){
     require('./setup')(program);
-    require('./hash')(program);
+    require('./pull')(program);
 };
