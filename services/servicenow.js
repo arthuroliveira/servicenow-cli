@@ -5,7 +5,7 @@ var restify = require('restify');
 var url = require('url');
 var util = require('util');
 
-module.exports = function table(tableName, config) {
+module.exports = function table(config) {
     var auth = new Buffer(config.auth, 'base64').toString(),
         parts = auth.split(':'),
         user = parts[0],
@@ -25,7 +25,7 @@ module.exports = function table(tableName, config) {
     }
 
 
-    this.tableName = tableName;
+    this.tableName = "";
 
     function validateResponse(err, req, res, obj, request) {
 
@@ -79,20 +79,6 @@ module.exports = function table(tableName, config) {
             return new Error(util.format('Response missing "records" key: %j\nCheck server logs.', obj));
         }
         return null;
-    }
-
-    function logResponse(err, req, res, obj, request) {
-        var resCode = res ? res.statusCode : 'no response';
-        console.log('-------------------------------------------------------');
-        console.log(err);
-        console.log('HTTP ' + req.method + ':', client.url.host, req.path,
-            '\nrequest:', request.postObj || '',
-            '\nresponse:', util.inspect({
-                statusCode: resCode,
-                body: obj
-            }, true, 10)
-        );
-        console.log('-------------------------------------------------------');
     }
 
     function send(request) {

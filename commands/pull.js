@@ -5,6 +5,9 @@ var inquirer = require("inquirer");
 var require_config = require("../helper/config_validator");
 var ServiceNow = require("../services/servicenow");
 
+var fs = require('fs');
+var path = require('path');
+
 var service;
 module.exports = function (program) {
     program
@@ -12,20 +15,57 @@ module.exports = function (program) {
         .description("Run this command to pull files from ServiceNow")
         .action(function () {
             require_config().then(function (config) {
+                var destination = path.join(process.cwd(), 'dist');
+                if (!fs.existsSync(destination)) {
+                    fs.mkdirSync(destination);
+                }
 
-                service = ServiceNow('content_css', config);
+                service = ServiceNow(config);
 
                 for (folder in config.folders) {
                     (function () {
-                        var tableName = config.folders[folder].table;
-                        service.tableName = tableName;
-                        service.getRecords({query: config.folders[folder].key + "STARTSWITH" + config.project_prefix}, function (err, data) {
-                            console.log(tableName);
-                            //console.log(data);
-                            console.log("------");
+
+                        var fname = folder;
+                        var folder_path = path.join(destination, folder);
+
+                        fs.mkdir(folder_path, function (err) {
+                            if (err) {
+                                if (err.code != 'EEXIST') {
+                                    console.log(err); // something else went wrong
+                                    return;
+                                }
+                            }
+
+
+                            var tableName = config.folders[fname].table;
+                            service.tableName = tableName;
+
+                            service.getRecords({
+                                query: config.folders[fname].key + "STARTSWITH" + config.project_prefix,
+                                row: 50
+                            }, function (err, data) {
+                                if (err) {
+                                    console.log(err);
+                                } else {
+                                    data.records.forEach(function (element, index) {
+                                        var content = element[config.folders[fname].field];
+                                        var filename = element.name + "." + config.folders[fname].extension;
+                                        var file_path = path.join(folder_path, filename);
+
+                                        fs.writeFile(file_path, content, function (err) {
+                                            if (err) {
+                                                console.log("ERR", err);
+                                            } else {
+                                                console.log("Touching file " + file_path);
+                                            }
+                                        });
+                                    });
+                                }
+                            });
+
+
                         });
                     })();
-
                 }
 
 
