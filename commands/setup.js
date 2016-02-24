@@ -19,7 +19,7 @@ module.exports = function (program) {
                 {
                     type: "input",
                     name: "host",
-                    message: "Enter servicenow instance url (\<instance\>.service-now.com). "
+                    message: "Enter servicenow instance name (\<instance\>.service-now.com). "
                 },
                 {
                     type: "input",
@@ -41,7 +41,7 @@ module.exports = function (program) {
                 var hash = new Buffer(answers.username + ':' + answers.password).toString('base64');
 
                 servicenow_config.auth = hash;
-                servicenow_config.host = answers.host;
+                servicenow_config.host = answers.host+".service-now.com";
                 servicenow_config.project_prefix = answers.project_prefix;
 
 
