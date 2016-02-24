@@ -23,7 +23,7 @@ module.exports = function (program) {
                 },
                 {
                     type: "input",
-                    name: "proj_prefix",
+                    name: "project_prefix",
                     message: "Enter your project prefix (e.g. fidelity__). "
                 },
                 {

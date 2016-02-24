@@ -7,34 +7,22 @@
     "stylesheets": {
       "table": "content_css",
       "key": "name",
-      "fields": {
-        "css": "style"
-      },
-      "_custom": true
+      "field": "style"
     },
     "ui_macros": {
       "table": "sys_ui_macro",
       "key": "name",
-      "fields": {
-        "xhtml": "xml"
-      },
-      "_custom": true
+      "field": "xml"
     },
     "ui_pages": {
       "table": "sys_ui_page",
       "key": "name",
-      "fields": {
-        "xhtml": "html"
-      },
-      "_custom": true
+      "field": "html"
     },
     "ui_scripts": {
       "table": "sys_ui_script",
       "key": "name",
-      "fields": {
-        "js": "script"
-      },
-      "_custom": true
+      "field": "script"
     }
   }
 }
