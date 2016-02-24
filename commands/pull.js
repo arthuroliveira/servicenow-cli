@@ -15,12 +15,17 @@ module.exports = function (program) {
 
                 service = ServiceNow('content_css', config);
 
-                service.getRecords({query:"nameSTARTSWITHfidelity__"}, function(err, data){
-                    console.log(data);
-                });
-
                 for (folder in config.folders) {
-                    console.log(folder);
+                    (function () {
+                        var tableName = config.folders[folder].table;
+                        service.tableName = tableName;
+                        service.getRecords({query: config.folders[folder].key + "STARTSWITH" + config.project_prefix}, function (err, data) {
+                            console.log(tableName);
+                            //console.log(data);
+                            console.log("------");
+                        });
+                    })();
+
                 }
 
 
