@@ -33,6 +33,12 @@
       "key": "name",
       "field": "programmatic_content",
       "extension": "xml"
+    },
+    "images": {
+      "table": "db_image",
+      "key": "name",
+      "field": "image",
+      "isImage" : true
     }
   }
 }

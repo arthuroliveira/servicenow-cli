@@ -27,38 +27,37 @@ module.exports = function (program) {
 
 
                 var clientOptions = {
-                    url: protocol + '://' + config.host
+                    url: protocol + '://' + config.host+"/welcome.do"
                 };
 
                 var client = restify.createJsonClient(clientOptions);
                 client.basicAuth(user, pass);
 
-                client.get(clientOptions.url, function(err, req, res, obj){
+                client.get(clientOptions.url, function (err, req, res, obj) {
+                    //console.log(res);
                     var regex = /var\s?g_ck\s\=\s?'(.*)';/g.exec(res.body);
 
-                    if (regex.length < 2) {
-                        console.log('error')
-                    } else {
-                        config.token = regex[1];
-                        fs.writeFile(config_path, JSON.stringify(config), function (err) {
-                            if (err) {
-                                return console.log(err);
-                            } else {
-                                console.log("Token updated successfully! ");
-                                console.log(config.token);
-                            }
-                        });
+                    if (regex) {
+
+                        if (regex.length < 2) {
+                            console.log('error')
+                        } else {
+                            config.token = regex[1];
+                            fs.writeFile(config_path, JSON.stringify(config), function (err) {
+                                if (err) {
+                                    return console.log(err);
+                                } else {
+                                    console.log("Token updated successfully! ");
+                                    console.log(config.token);
+                                }
+                            });
+                        }
+
                     }
                 });
 
 
-
             });
-            //curl "https://aoliveira1.service-now.com" \
-            //    --request GET \
-            //    --header "Accept:application/json" \
-            //    --user 'admin':'arthur'
-
         });
 
     return program;

@@ -84,16 +84,24 @@ module.exports = function (program) {
                                         data.records.forEach(function (element, index) {
                                             var content = element[config.folders[fname].field];
                                             var filename = element.name;
-                                            var filenameWithExtension = filename + "." + config.folders[fname].extension;
-                                            var file_path = path.join(folder_path, filenameWithExtension);
 
-                                            fs.writeFile(file_path, content, function (err) {
-                                                if (err) {
-                                                    console.log("ERR", err);
-                                                } else {
-                                                    console.log("Touching file " + file_path);
-                                                }
-                                            });
+                                            if ('extension' in config.folders[fname]) {
+                                                filename = filename + "." + config.folders[fname].extension;
+                                            }
+                                            var file_path = path.join(folder_path, filename);
+
+                                            if (!'isImage' in config.folders[fname]) {
+                                                fs.writeFile(file_path, content, function (err) {
+                                                    if (err) {
+                                                        console.log("ERR", err);
+                                                    } else {
+                                                        console.log("Touching file " + file_path);
+                                                    }
+                                                });
+                                            } else {
+                                                console.log("Image TO be implemented!");
+                                                //console.log(data);
+                                            }
                                         });
                                     }
                                 });
