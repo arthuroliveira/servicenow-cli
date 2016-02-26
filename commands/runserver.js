@@ -10,8 +10,11 @@ var require_config = require("../helper/config_validator");
 module.exports = function (program) {
     program
         .command("runserver")
-        .description("Run this command to run server")
-        .action(function () {
+        .usage('<port>')
+        .description("Run this command to run server (default port 3000)")
+        .action(function (port) {
+            if (typeof port === "object")
+                port = 3000;
 
             var app = express();
 
@@ -46,8 +49,16 @@ module.exports = function (program) {
 
             app.use(express.static('dist'));
 
-            app.listen(3000, function () {
-                console.log('Example app listening on port 3000!');
+            app.listen(port, function () {
+                console.log('App listening on port ' + port + '!');
+            });
+
+            process.on('uncaughtException', function (err) {
+                if (err.errno === 'EADDRINUSE')
+                    console.log("Port "+port+" already in use.");
+                else
+                    trow(err);
+                process.exit(1);
             });
 
 
