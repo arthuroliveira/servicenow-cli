@@ -5,6 +5,9 @@ var inquirer = require("inquirer");
 var require_config = require("../helper/config_validator");
 var ServiceNow = require("../services/servicenow");
 
+var fs = require('fs');
+var path = require('path');
+
 
 var service;
 module.exports = function (program) {
@@ -14,7 +17,20 @@ module.exports = function (program) {
         .usage('<file>')
         .action(function (file) {
             require_config().then(function (config) {
-                console.log(file);
+                var file_path;
+                if (file[0] == "/") {
+                    file_path = file;
+                } else {
+                    file_path = path.join(process.cwd(), file);
+                }
+
+                fs.readFile(file_path,  'utf-8',function (err, data) {
+                    if (err) throw err;
+                    console.log(data);
+
+
+
+                });
             });
         });
 };
