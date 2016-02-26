@@ -89,8 +89,7 @@ module.exports = function (program) {
                                                 filename = filename + "." + config.folders[fname].extension;
                                             }
                                             var file_path = path.join(folder_path, filename);
-
-                                            if (!'isImage' in config.folders[fname]) {
+                                            if (!('isImage' in config.folders[fname])) {
                                                 fs.writeFile(file_path, content, function (err) {
                                                     if (err) {
                                                         console.log("ERR", err);
