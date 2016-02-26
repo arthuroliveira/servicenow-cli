@@ -73,7 +73,7 @@ module.exports = function (program) {
                                     fs.readdirSync(folder_path).forEach(function (name) {
                                         if (name[0] != ".") {
                                             var filename = name.replace(/\.\w+$/g, "");
-                                            console.log(filename)
+                                            // console.log(filename)
                                             if (query) {
                                                 query += "^OR" + config.folders[fname].key + "STARTSWITH" + filename;
                                             } else {
@@ -92,8 +92,8 @@ module.exports = function (program) {
 
                                 service.getRecords({
                                     query: query,
-                                    //rows: 50
-                                    rows: 5
+                                    rows: 50
+
                                 }, function (err, data) {
                                     if (err) {
                                         console.log(err);
