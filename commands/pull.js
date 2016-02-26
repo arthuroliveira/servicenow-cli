@@ -23,33 +23,32 @@ module.exports = function (program) {
                 }
 
 
-                var questions = [{
-                    type: "checkbox",
-                    name: "table",
-                    message: "What table(s) do you want to pull?",
-                    choices: Object.keys(config.folders)
-                },
-                    {
-                        type: "confirm",
-                        name: "specific_confirm",
-                        message: "Do you wanna pull a specific name?"
+                var questions =
+                    [{
+                        type: "checkbox",
+                        name: "table",
+                        message: "What table(s) do you want to pull?",
+                        choices: Object.keys(config.folders)
                     },
-                    {
-                        type: "input",
-                        name: "specific",
-                        message: "What filename do you want to pull?",
-                        when: function (answers) {
-                            return answers.specific_confirm;
-                        }
-                    }
-                ];
+                        {
+                            type: "confirm",
+                            name: "existing_files",
+                            message: "Do you want to pull the existing files?"
+
+                        },
+                        {
+                            type: "input",
+                            name: "specific",
+                            message: "What filename do you want to pull?",
+                            default: config.project_prefix,
+                            when: function (answers) {
+                                return !answers.existing_files;
+                            }
+                        }];
 
                 inquirer.prompt(questions, function (answers) {
-
                     for (key in answers.table) {
-
                         var folder = answers.table[key];
-
 
                         (function () {
 
@@ -68,15 +67,33 @@ module.exports = function (program) {
                                 var tableName = config.folders[fname].table;
                                 service.tableName = tableName;
                                 var query;
-                                if (answers.specific) {
-                                    query = config.folders[fname].key + "STARTSWITH" + answers.specific;
+
+
+                                if (answers.existing_files) {
+                                    fs.readdirSync(folder_path).forEach(function (name) {
+                                        if (name[0] != ".") {
+                                            var filename = name.replace(/\.\w+$/g, "");
+                                            console.log(filename)
+                                            if (query) {
+                                                query += "^OR" + config.folders[fname].key + "STARTSWITH" + filename;
+                                            } else {
+                                                query = config.folders[fname].key + "STARTSWITH" + filename;
+                                            }
+                                        }
+                                    });
                                 } else {
-                                    query = config.folders[fname].key + "STARTSWITH" + config.project_prefix;
+                                    query = config.folders[fname].key + "STARTSWITH" + answers.specific;
+                                }
+
+                                if (!query) {
+                                    console.log("No files to be pulled");
+                                    return;
                                 }
 
                                 service.getRecords({
                                     query: query,
-                                    rows: 50
+                                    //rows: 50
+                                    rows: 5
                                 }, function (err, data) {
                                     if (err) {
                                         console.log(err);
@@ -104,8 +121,6 @@ module.exports = function (program) {
                                         });
                                     }
                                 });
-
-
                             });
                         })();
                     }
