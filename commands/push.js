@@ -4,6 +4,7 @@
 var inquirer = require("inquirer");
 var require_config = require("../helper/config_validator");
 var ServiceNow = require("../services/servicenow");
+var service;
 
 var fs = require('fs');
 var path = require('path');
@@ -17,19 +18,42 @@ module.exports = function (program) {
         .usage('<file>')
         .action(function (file) {
             require_config().then(function (config) {
+                service = ServiceNow(config);
                 var file_path;
-                if (file[0] == "/") {
+
+                if (path.isAbsolute(file)) {
                     file_path = file;
                 } else {
                     file_path = path.join(process.cwd(), file);
                 }
 
-                fs.readFile(file_path,  'utf-8',function (err, data) {
+                fs.readFile(file_path, 'utf-8', function (err, data) {
                     if (err) throw err;
-                    console.log(data);
 
 
+                    var folders = file_path.split(path.sep);
+                    var root_folder = folders[folders.length - 2];
+                    var filenameWithoutExtension = path.parse(folders[folders.length - 1]).name;
 
+                    if (root_folder in config.folders) {
+
+                        var db = {
+                            table: config.folders[root_folder].table,
+                            query: config.folders[root_folder].key + '=' + filenameWithoutExtension,
+                            payload: {}
+                        };
+
+                        db.payload[config.folders[root_folder].field] = data;
+
+                        service.update(db, function (err, data) {
+                            if (err) {
+                                throw(err);
+                            } else {
+                                console.log("File updated!")
+                            }
+                        });
+
+                    }
                 });
             });
         });

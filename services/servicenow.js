@@ -165,7 +165,7 @@ module.exports = function table(config) {
      */
     this.update = function(query, callback) {
         var parms = {
-            table: this.t,
+            table: query.table || this.tableName,
             action: 'update',
             parmName: 'query',
             parmValue: query.query,
