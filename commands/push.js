@@ -16,7 +16,8 @@ module.exports = function (program) {
         .command("push")
         .description("Run this command to push files to ServiceNow")
         .usage('<file>')
-        .action(function (file) {
+        .option('-n, --new', 'Push as new database record')
+        .action(function (file, options) {
             require_config().then(function (config) {
                 service = ServiceNow(config);
                 var file_path;
@@ -48,6 +49,8 @@ module.exports = function (program) {
                         service.update(db, function (err, data) {
                             if (err) {
                                 throw(err);
+                            } else if (data.records.length == 0) {
+                                console.log("File doesn't exist. Pass flag --new (-n) to create a new record");
                             } else {
                                 console.log("File updated!")
                             }
