@@ -79,7 +79,7 @@ module.exports = function table(config) {
             return new Error(util.format('Response missing "records" key: %j\nCheck server logs.', obj));
         }
         return null;
-    }
+    };
 
     function send(request) {
         var maxRecords = request.rows || 1;
@@ -116,7 +116,7 @@ module.exports = function table(config) {
             // fail hard!
             process.exit(1);
         }
-    }
+    };
 
     this.getRecords = function(query, callback) {
         var parms = {
@@ -141,7 +141,7 @@ module.exports = function table(config) {
         }
 
         send(parms);
-    }
+    };
 
     this.get = function(id, callback) {
         send({
@@ -151,12 +151,23 @@ module.exports = function table(config) {
             parmValue: id,
             callback: callback
         });
-    }
+    };
 
-    this.insert = function(obj, callback) {
+    this.insert = function(query, callback) {
         console.log('DP TODO : insert not yet tested nor supported!');
         //send({table: this.tableName, action: 'insert', postObj: obj, callback: callback});
-    }
+
+        var parms = {
+            table: query.table || this.tableName,
+            action: 'insert',
+            parmName: 'query',
+            parmValue: query.query,
+            postObj: query.payload,
+            callback: callback
+        };
+
+        send(parms);
+    };
 
     /**
      * Update an instance record
@@ -179,7 +190,7 @@ module.exports = function table(config) {
             parms.parmValue = query.sys_id;
         }
         send(parms);
-    }
+    };
 
     return this;
 };

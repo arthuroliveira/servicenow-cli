@@ -46,7 +46,14 @@ module.exports = function (program) {
 
                         db.payload[config.folders[root_folder].field] = data;
 
-                        service.update(db, function (err, data) {
+                        var action;
+                        if (options.new) {
+                            action = service.insert;
+                        } else {
+                            action = service.update;
+                        }
+
+                        action(db, function (err, data) {
                             if (err) {
                                 throw(err);
                             } else if (data.records.length == 0) {
