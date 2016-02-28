@@ -50,7 +50,7 @@ module.exports = function (program) {
                             if (err) {
                                 throw(err);
                             } else if (data.records.length == 0) {
-                                console.log("File doesn't exist. Pass flag --new (-n) to create a new record");
+                                console.log("File doesn't exist. Use flag --new (-n) to create a new record");
                             } else {
                                 console.log("File updated!")
                             }
