@@ -49,17 +49,24 @@ module.exports = function (program) {
                         var action;
                         if (options.new) {
                             action = service.insert;
+                            db.payload = {
+                                name : filenameWithoutExtension,
+                                script : data
+                            };
                         } else {
                             action = service.update;
                         }
-
                         action(db, function (err, data) {
                             if (err) {
                                 throw(err);
                             } else if (data.records.length == 0) {
                                 console.log("File doesn't exist. Use flag --new (-n) to create a new record");
                             } else {
-                                console.log("File updated!")
+                                if (options.new) {
+                                    console.log("File created!")
+                                } else {
+                                    console.log("File updated!")
+                                }
                             }
                         });
 
