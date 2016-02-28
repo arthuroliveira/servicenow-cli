@@ -24,7 +24,7 @@ module.exports = function (program) {
                 {
                     type: "input",
                     name: "project_prefix",
-                    message: "Enter your project prefix (e.g. fidelity__). "
+                    message: "Enter your project prefix (e.g. ProjectName__). "
                 },
                 {
                     type: "input",
