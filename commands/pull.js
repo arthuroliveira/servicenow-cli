@@ -29,22 +29,20 @@ module.exports = function (program) {
                         name: "table",
                         message: "What table(s) do you want to pull?",
                         choices: Object.keys(config.folders)
-                    },
-                        {
-                            type: "confirm",
-                            name: "existing_files",
-                            message: "Do you want to pull the existing files?"
-
-                        },
-                        {
-                            type: "input",
-                            name: "specific",
-                            message: "What filename do you want to pull?",
-                            default: config.project_prefix,
-                            when: function (answers) {
-                                return !answers.existing_files;
-                            }
-                        }];
+                    }, {
+                        type: "confirm",
+                        name: "existing_files",
+                        message: "Do you want to pull the existing files?",
+                        default: false
+                    }, {
+                        type: "input",
+                        name: "specific",
+                        message: "What filename do you want to pull?",
+                        default: config.project_prefix,
+                        when: function (answers) {
+                            return !answers.existing_files;
+                        }
+                    }];
 
                 inquirer.prompt(questions, function (answers) {
                     for (key in answers.table) {
